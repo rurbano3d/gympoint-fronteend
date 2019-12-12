@@ -1,20 +1,47 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '~/assets/logo.png';
+import { useSelector, useDispatch } from 'react-redux';
+import logo from '~/assets/iconeGym.png';
 
-import { Container, Content } from './styles';
+import { signOut } from '~/store/modules/auth/actions';
+
+import { Container, Content, Profile, ItemLink, Logo } from './styles';
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const profile = useSelector(state => state.user.profile);
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
   return (
     <Container>
       <Content>
         <nav>
-          <img src={logo} alt="Gym Point" />
-          <Link to="/alunos">ALUNOS</Link>
-          <Link to="/planos">PLANOS</Link>
-          <Link to="/matricualas">MATRÍCULAS</Link>
-          <Link to="/pedidos">PEDIDOS DE AUXÍLIO</Link>
+          <Logo>
+            <img src={logo} alt="Gym Point" />
+            <span>GYMPOINT</span>
+          </Logo>
+          <ItemLink to="/alunos" exact activeClassName="active">
+            ALUNOS
+          </ItemLink>
+          <ItemLink to="/planos" exact activeClassName="active">
+            PLANO
+          </ItemLink>
+          <ItemLink to="/matriculas" exact activeClassName="active">
+            MATRÍCULAS
+          </ItemLink>
+          <ItemLink to="/pedidos" exact activeClassName="active">
+            PEDIDOS DE AUXÍLIO
+          </ItemLink>
         </nav>
+        <aside>
+          <Profile>
+            <strong>{profile.name}</strong>
+            <button type="button" onClick={handleSignOut}>
+              sair do sistema
+            </button>
+          </Profile>
+        </aside>
       </Content>
     </Container>
   );
