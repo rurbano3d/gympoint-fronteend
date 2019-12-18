@@ -34,10 +34,7 @@ export const Card = styled.div`
     input {
       width: 300px;
       height: 45px;
-      border: 1px solid #dddddd;
-      padding: 0 15px;
-      border-radius: 5px;
-      color: #666666;
+
     }
     span {
       color: #ee4d63;

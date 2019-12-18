@@ -31,4 +31,61 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+  input{
+    padding: 0 15px 0;
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    color: #666666;
+  }
+  table{
+    width:100%;
+    text-align:left;
+  }
+
+  thead tr th {
+    padding:20px;
+    font-size:16px;
+    color:#444444;
+  }
+
+  tbody tr{
+    td{
+      padding:15px 0 15px 20px;
+      font-size:16px;
+      color:#666666;
+      border-bottom: 1px solid #eee;
+    }
+    &:last-child td{
+      border-bottom: none;
+    }
+  }
+
+  .container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+ .top{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 78%;
+    margin: 25px 0 25px 0;
+  }
+
+  .left{
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  form span{
+    color: #ee4d63;
+    align-self: flex-start;
+    margin:-5px 0 0 0;
+    font-weight: bold;
+  }
+
 `;
