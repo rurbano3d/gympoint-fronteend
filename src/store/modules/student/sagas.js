@@ -71,7 +71,6 @@ export function* studentUpdate({ payload }) {
 }
 
 export function* studentDelete({ payload }) {
-  console.tron.log(payload);
   try {
     const { id } = payload;
 

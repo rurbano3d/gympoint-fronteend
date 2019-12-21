@@ -19,7 +19,7 @@ export default createGlobalStyle`
   body {
     -webkit-font-smoothing: antialiased !important;
   }
-  body, input, button {
+  body, input, button, select {
     font: 14px 'Roboto', sans-serif;
   }
   a{
@@ -37,6 +37,7 @@ export default createGlobalStyle`
     border: 1px solid #dddddd;
     color: #666666;
   }
+
   table{
     width:100%;
     text-align:left;
@@ -54,6 +55,12 @@ export default createGlobalStyle`
       font-size:16px;
       color:#666666;
       border-bottom: 1px solid #eee;
+
+      div{
+        span{
+          margin-left:30px;
+        }
+      }
     }
     &:last-child td{
       border-bottom: none;
@@ -86,6 +93,9 @@ export default createGlobalStyle`
     align-self: flex-start;
     margin:-5px 0 0 0;
     font-weight: bold;
+  }
+  #blockInput input {
+    background-color: #f5f5f5;
   }
 
 `;

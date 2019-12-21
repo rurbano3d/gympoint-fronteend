@@ -16,9 +16,9 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Email inválido')
     .required('Email obrigatório'),
-  age: Yup.number().required('Idade obrigatória'),
-  weight: Yup.number().required('Peso obrigatória'),
-  height: Yup.number().required('Altura obrigatória'),
+  age: Yup.number().typeError('Idade obrigatória'),
+  weight: Yup.number().typeError('Peso obrigatória'),
+  height: Yup.number().typeError('Altura obrigatória'),
 });
 
 export default function Cadastrar() {
@@ -55,6 +55,7 @@ export default function Cadastrar() {
           <div>
             <div>
               <label>IDADE</label>
+
               <Input name="age" type="number" />
             </div>
             <div>

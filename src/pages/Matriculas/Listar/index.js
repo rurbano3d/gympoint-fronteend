@@ -7,61 +7,48 @@ import ButtonLink from '~/components/ButtonLink';
 import Loading from '~/components/Loading';
 import Paginate from '~/components/Paginate';
 import Alert from '~/util/alert';
-import { studentDelete } from '~/store/modules/student/actions';
+import { registrationDelete } from '~/store/modules/registration/actions';
+import { formatDate } from '~/util';
 
 import { Right, Content, ItemLink } from './styles';
 // eslint-disable-next-line react/prefer-stateless-function
-export default function ListarAlunos() {
-  const [students, setStudents] = useState({});
-  const [search, setSearch] = useState('');
+export default function ListarPlanos() {
+  const [registrations, setRegistration] = useState({});
   const [page, setPage] = useState('1');
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
-  async function handleSearch(e) {
-    setLoading(true);
-    setSearch(e.target.value);
-  }
   function handlePage(data) {
     setPage(data.selected + 1);
   }
   function handleDelete(id) {
     Alert.delete().then(result => {
       if (result.value) {
-        dispatch(studentDelete(id));
+        dispatch(registrationDelete(id));
       }
     });
   }
-
-  console.tron.log(page);
   useEffect(() => {
-    async function loadStudents() {
-      const response = await api.get('students', {
-        params: { q: search, page },
+    async function loadRegistration() {
+      const response = await api.get('registrations', {
+        params: { page },
       });
-      setStudents(response.data);
+      setRegistration(response.data);
       setLoading(false);
     }
-    loadStudents();
-  }, [page, search]);
+    loadRegistration();
+  }, [page]);
   return (
     <div className="container">
       <div className="top">
         <div className="left">
-          <strong>Gerenciando alunos</strong>
+          <strong>Gerenciando de matrículas</strong>
         </div>
         <Right>
-          <ButtonLink to="/alunos/novo">
+          <ButtonLink to="/matriculas/novo">
             <MdAdd size={20} color="fff" />
             <span>CADASTRAR</span>
           </ButtonLink>
-          <input
-            type="text"
-            name="name"
-            value={search}
-            onChange={handleSearch}
-            placeholder="Buscar aluno"
-          />
         </Right>
       </div>
       <Content>
@@ -72,27 +59,32 @@ export default function ListarAlunos() {
           <table>
             <thead>
               <tr>
-                <th>NOME</th>
-                <th>E-MAIL</th>
-                <th>IDADE</th>
+                <th>ALUNO</th>
+                <th>PLANO</th>
+                <th>INÍCIO </th>
+                <th>TÉRMINO</th>
+                <th>ATIVA</th>
+                <th />
                 <th />
               </tr>
             </thead>
 
             <tbody>
-              {students.length ? (
-                students.map(s => (
-                  <tr key={s.id}>
-                    <td>{s.name}</td>
-                    <td>{s.email}</td>
-                    <td>{s.age}</td>
+              {registrations.length ? (
+                registrations.map(e => (
+                  <tr key={e.id}>
+                    <td>{e.student.name}</td>
+                    <td>{e.plan.title}</td>
+                    <td>{formatDate(e.start_date)}</td>
+                    <td>{formatDate(e.end_date)}</td>
+                    <td>{e.active}</td>
                     <td>
-                      <div>
-                        <ItemLink to={`/alunos/${s.id}/editar`} exact>
-                          editar
-                        </ItemLink>
-                        <span onClick={() => handleDelete(s.id)}>apagar</span>
-                      </div>
+                      <ItemLink to={`/matriculas/${e.id}/editar`} exact>
+                        editar
+                      </ItemLink>
+                    </td>
+                    <td>
+                      <span onClick={() => handleDelete(e.id)}>apagar</span>
                     </td>
                   </tr>
                 ))

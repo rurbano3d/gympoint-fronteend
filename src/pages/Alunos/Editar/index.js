@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 
 import { MdKeyboardArrowLeft, MdCheck } from 'react-icons/md';
@@ -48,7 +49,7 @@ export default function EditarAlunos({ match }) {
     <div className="container">
       <div className="top">
         <div className="left">
-          <strong>Cadastro de aluno</strong>
+          <strong>Edição de aluno</strong>
         </div>
         <Right>
           <ButtonLink to="/alunos" color="#cccccc">
@@ -91,3 +92,10 @@ export default function EditarAlunos({ match }) {
     </div>
   );
 }
+EditarAlunos.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+};
