@@ -69,9 +69,9 @@ export function* registrationDelete({ payload }) {
 
     const response = yield call(api.delete, `registrations/${id}`);
 
-    toast.success('Plano removido com sucesso');
+    toast.success('Matrícula removido com sucesso');
     yield put(registrationSuccess(response.data));
-    history.push('/matriculas');
+    window.location.reload();
   } catch (err) {
     toast.error('Deu erro, por favor contate o suporte!');
     yield put(registrationFailure());
