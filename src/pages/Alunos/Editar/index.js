@@ -10,6 +10,8 @@ import { studentUpdate } from '~/store/modules/student/actions';
 import api from '~/services/api';
 import Button from '~/components/Button';
 import ButtonLink from '~/components/ButtonLink';
+import InputMask from '~/components/InputMask';
+import CurrencyInput from '~/components/CurrencyInput';
 
 import { Right, Content } from './styles';
 
@@ -18,15 +20,17 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Email inválido')
     .required('Email obrigatório'),
-  age: Yup.number().required('Idade obrigatória'),
-  weight: Yup.number().required('Peso obrigatória'),
-  height: Yup.number().required('Altura obrigatória'),
+  age: Yup.number().typeError('Idade obrigatória'),
+  weight: Yup.string().required('Peso obrigatória'),
+  height: Yup.string().required('Altura obrigatória'),
 });
 
 export default function EditarAlunos({ match }) {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.auth.loading);
   const [student, setStudent] = useState({});
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
 
   const { id } = match.params;
 
@@ -35,11 +39,13 @@ export default function EditarAlunos({ match }) {
       async function loadStudent() {
         const response = await api.get(`students/${id}`);
         setStudent(response.data);
+        setHeight(student.height);
+        setWeight(student.weight);
       }
 
       loadStudent();
     }
-  }, [id]);
+  }, [id, student.height, student.weight]);
 
   function handleSubmit({ name, email, age, weight, height }) {
     dispatch(studentUpdate(id, name, email, age, weight, height));
@@ -80,11 +86,21 @@ export default function EditarAlunos({ match }) {
             </div>
             <div>
               <label>PESO (em kg)</label>
-              <Input name="weight" type="number" />
+              <CurrencyInput
+                name="weight"
+                precision="3"
+                value={weight}
+                onChangeEvent={e => setWeight(e.target.value)}
+              />
             </div>
             <div>
               <label>ALTURA</label>
-              <Input name="height" type="number" />
+              <InputMask
+                name="height"
+                inputMask="9.99"
+                value={height}
+                onChange={e => setHeight(e.target.value)}
+              />
             </div>
           </div>
         </Form>

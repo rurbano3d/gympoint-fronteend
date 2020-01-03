@@ -71,8 +71,11 @@ export default function ListarPlanos() {
                 plans.map(p => (
                   <tr key={p.id}>
                     <td>{p.title}</td>
-                    <td>{p.duration}</td>
-                    <td>{p.price}</td>
+                    <td>
+                      {p.duration}
+                      {p.duration <= 1 ? ' mês' : ' meses'}
+                    </td>
+                    <td>R$ {p.price}</td>
                     <td>
                       <ItemLink to={`/planos/${p.id}/editar`} exact>
                         editar

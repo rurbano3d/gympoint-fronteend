@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdCheckCircle } from 'react-icons/md';
 
 import api from '~/services/api';
 import ButtonLink from '~/components/ButtonLink';
@@ -8,9 +8,9 @@ import Loading from '~/components/Loading';
 import Paginate from '~/components/Paginate';
 import Alert from '~/util/alert';
 import { registrationDelete } from '~/store/modules/registration/actions';
-import { formatDate } from '~/util';
+import { completFormatDate } from '~/util';
 
-import { Right, Content, ItemLink } from './styles';
+import { Right, Content, ItemLink, Icon } from './styles';
 // eslint-disable-next-line react/prefer-stateless-function
 export default function ListarPlanos() {
   const [registrations, setRegistration] = useState({});
@@ -75,9 +75,17 @@ export default function ListarPlanos() {
                   <tr key={e.id}>
                     <td>{e.student.name}</td>
                     <td>{e.plan.title}</td>
-                    <td>{formatDate(e.start_date)}</td>
-                    <td>{formatDate(e.end_date)}</td>
-                    <td>{e.active}</td>
+                    <td>{completFormatDate(e.start_date)}</td>
+                    <td>{completFormatDate(e.end_date)}</td>
+                    <td>
+                      <Icon>
+                        {e.active ? (
+                          <MdCheckCircle size={20} color="#42cb59" />
+                        ) : (
+                          <MdCheckCircle size={20} color="#dddddd" />
+                        )}
+                      </Icon>
+                    </td>
                     <td>
                       <ItemLink to={`/matriculas/${e.id}/editar`} exact>
                         editar

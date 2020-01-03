@@ -38,8 +38,10 @@ export default function Pedidos() {
         answer: data.answer,
       });
       toast.success('Resposta enviada com sucesso');
+
       setShowModal(!showModal);
       resetForm();
+      window.location.reload();
     } catch (err) {
       toast.error('Ops, Erro ao responder');
     }
@@ -70,7 +72,7 @@ export default function Pedidos() {
           <table>
             <thead>
               <tr>
-                <th>ALUNO</th>
+                <th width="80%">ALUNO</th>
                 <th />
               </tr>
             </thead>

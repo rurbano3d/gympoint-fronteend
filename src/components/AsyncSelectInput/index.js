@@ -1,89 +1,62 @@
-import React, { useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import AsyncSelect from 'react-select/async';
-
-import { debounce } from 'lodash';
+import PropTypes from 'prop-types';
 
 import { useField } from '@rocketseat/unform';
 
-import { Container } from './styles';
-
-export default function ReactSelectAsync({
+export default function MyAsyncSelector({
   name,
-  options,
-  multiple,
-  asyncFunc,
+  loadOptions,
+  noOptionsMessage,
   ...rest
 }) {
-  const ref = useRef(null);
+  const ref = useRef();
   const { fieldName, registerField, defaultValue, error } = useField(name);
+  const [value, setValue] = useState(defaultValue);
 
-  function parseSelectValue(selectRef) {
-    const selectValue = selectRef.props.value;
-    if (!multiple) {
-      return selectValue ? selectValue.id : '';
-    }
-
-    return selectValue ? selectValue.map(option => option.id) : [];
-  }
+  useMemo(() => setValue(defaultValue), [defaultValue]); //eslint-disable-line
 
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: ref.current,
-      path: 'props.value.id',
-      parseValue: parseSelectValue,
-      clearValue: selectRef => {
-        selectRef.select.clearValue();
-      },
+      path: 'props.value',
     });
   }, [ref.current, fieldName]); // eslint-disable-line
 
-  const loadValues = value => asyncFunc(value);
-
-  const debouncedLoadOptions = debounce(loadValues, 500, {
-    leading: true,
-  });
-
-  function getDefaultValue() {
-    if (!defaultValue) return null;
-
-    if (!multiple) {
-      return options.find(option => option.id === defaultValue);
-    }
-
-    return options.filter(option => defaultValue.includes(option.id));
+  function handleChange(selectedValue) {
+    setValue(selectedValue);
   }
 
   return (
-    <Container>
+    <>
       <AsyncSelect
         name={fieldName}
-        aria-label={fieldName}
-        loadOptions={inputValue => debouncedLoadOptions(inputValue)}
-        options={options}
-        isMulti={multiple}
-        defaultValue={getDefaultValue()}
+        loadOptions={loadOptions}
+        ref={ref}
         getOptionValue={option => option.id}
         getOptionLabel={option => option.name}
-        noOptionsMessage={() => 'Nenhum registro localizado'}
-        loadingMessage={() => 'Carregando...'}
+        className="react-asyncselect-container"
+        classNamePrefix="react-asyncselect"
         placeholder="Selecione..."
-        ref={ref}
+        loadingMessage={() => 'Carregando...'}
+        noOptionsMessage={() =>
+          noOptionsMessage || 'Nenhum registro encontrado'
+        }
         {...rest}
       />
 
       {error && <span>{error}</span>}
-    </Container>
+    </>
   );
 }
 
-ReactSelectAsync.propTypes = {
-  name: PropTypes.string.isRequired,
-  multiple: PropTypes.bool,
-  asyncFunc: PropTypes.func.isRequired,
+MyAsyncSelector.defaultProps = {
+  noOptionsMessage: null,
 };
 
-ReactSelectAsync.defaultProps = {
-  multiple: false,
+MyAsyncSelector.propTypes = {
+  name: PropTypes.string.isRequired,
+  loadOptions: PropTypes.func.isRequired,
+  noOptionsMessage: PropTypes.string,
 };

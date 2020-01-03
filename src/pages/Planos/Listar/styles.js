@@ -22,6 +22,7 @@ export const Content = styled.div`
 
   table tbody span {
     color: #de3b3b;
+    cursor: pointer;
   }
 `;
 export const ItemLink = styled(NavLink)`

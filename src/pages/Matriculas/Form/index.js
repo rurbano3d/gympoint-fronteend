@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
 
 import { addMonths } from 'date-fns';
 import { MdKeyboardArrowLeft, MdCheck } from 'react-icons/md';
-import { Form, Input, Select } from '@rocketseat/unform';
+import { Form, Select } from '@rocketseat/unform';
 
 import {
   registrationRequest,
@@ -14,6 +15,7 @@ import {
 import Button from '~/components/Button';
 import ButtonLink from '~/components/ButtonLink';
 import DateInput from '~/components/DateInput';
+import CurrencyInput from '~/components/CurrencyInput';
 
 import { formatDate } from '~/util';
 
@@ -45,11 +47,11 @@ export default function FormMatriculas({ match }) {
   const { id } = match.params;
 
   useEffect(() => {
+    async function loadRegistration() {
+      const response = await api.get(`registrations/${id}`);
+      setRegistration(response.data);
+    }
     if (id) {
-      async function loadRegistration() {
-        const response = await api.get(`registrations/${id}`);
-        setRegistration(response.data);
-      }
       loadRegistration();
     }
   }, [id, registration.student]);
@@ -94,7 +96,7 @@ export default function FormMatriculas({ match }) {
       dispatch(registrationRequest(student_id, plan_id, start_date));
     }
   }
-  console.tron.log(studentSelected);
+
   return (
     <div className="container">
       <div className="top">
@@ -129,6 +131,7 @@ export default function FormMatriculas({ match }) {
             onChange={e => setStudentSelected(e.target.value)}
             value={studentSelected || registration.student_id}
           />
+
           <div>
             <div>
               <label>PLANO</label>
@@ -161,9 +164,8 @@ export default function FormMatriculas({ match }) {
             </div>
             <div id="totalPrice">
               <label>VALOR FINAL</label>
-              <Input
+              <CurrencyInput
                 name="priceTotal"
-                type="number"
                 value={priceTotal || registration.price}
                 disabled
               />
@@ -174,3 +176,10 @@ export default function FormMatriculas({ match }) {
     </div>
   );
 }
+FormMatriculas.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+};

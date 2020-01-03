@@ -8,13 +8,14 @@ import { Form, Input } from '@rocketseat/unform';
 import { planRequest } from '~/store/modules/plan/actions';
 import Button from '~/components/Button';
 import ButtonLink from '~/components/ButtonLink';
+import CurrencyInput from '~/components/CurrencyInput';
 
 import { Right, Content } from './styles';
 
 const schema = Yup.object().shape({
   title: Yup.string().required('Título obrigatório'),
   duration: Yup.string().required('Duração obrigatória'),
-  price: Yup.number().required('Valor obrigatório'),
+  price: Yup.string().required('Valor obrigatório'),
 });
 
 export default function CadastrarPlano() {
@@ -31,7 +32,7 @@ export default function CadastrarPlano() {
   function handleSubmit({ title }) {
     dispatch(planRequest(title, duration, price));
   }
-
+  console.tron.log(total);
   return (
     <div className="container">
       <div className="top">
@@ -64,15 +65,15 @@ export default function CadastrarPlano() {
             </div>
             <div>
               <label>PREÇO MENSAL</label>
-              <Input
+              <CurrencyInput
                 name="price"
-                type="number"
-                onChange={e => setPrice(e.target.value)}
+                value={price}
+                onChangeEvent={e => setPrice(e.target.value)}
               />
             </div>
             <div id="blockInput">
               <label>PREÇO TOTAL</label>
-              <Input name="priceTotal" value={total} type="number" disabled />
+              <CurrencyInput name="priceTotal" value={total} disabled />
             </div>
           </div>
         </Form>

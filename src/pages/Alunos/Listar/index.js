@@ -74,8 +74,8 @@ export default function ListarAlunos() {
               <tr>
                 <th>NOME</th>
                 <th>E-MAIL</th>
-                <th>IDADE</th>
-                <th />
+                <th width="10%">IDADE</th>
+                <th width="20%" />
               </tr>
             </thead>
 
@@ -85,7 +85,7 @@ export default function ListarAlunos() {
                   <tr key={s.id}>
                     <td>{s.name}</td>
                     <td>{s.email}</td>
-                    <td>{s.age}</td>
+                    <td align="center">{s.age}</td>
                     <td>
                       <div>
                         <ItemLink to={`/alunos/${s.id}/editar`} exact>

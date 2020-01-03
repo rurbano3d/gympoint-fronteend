@@ -22,8 +22,14 @@ export const Content = styled.div`
 
   table tbody span {
     color: #de3b3b;
+    cursor: pointer;
   }
 `;
 export const ItemLink = styled(NavLink)`
   color: #4d85ee;
+`;
+
+export const Icon = styled.div`
+  display: flex;
+  justify-content: center;
 `;

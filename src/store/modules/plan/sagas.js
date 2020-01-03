@@ -75,7 +75,8 @@ export function* planDelete({ payload }) {
 
     toast.success('Plano removido com sucesso');
     yield put(planSuccess(response.data));
-    history.push('/planos');
+
+    window.location.reload();
   } catch (err) {
     toast.error('Deu erro, por favor contate o suporte!');
     yield put(planFailure());

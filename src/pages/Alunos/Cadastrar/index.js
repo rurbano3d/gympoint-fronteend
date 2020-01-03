@@ -8,6 +8,8 @@ import { Form, Input } from '@rocketseat/unform';
 import { studentRequest } from '~/store/modules/student/actions';
 import Button from '~/components/Button';
 import ButtonLink from '~/components/ButtonLink';
+import InputMask from '~/components/InputMask';
+import CurrencyInput from '~/components/CurrencyInput';
 
 import { Right, Content } from './styles';
 
@@ -17,8 +19,8 @@ const schema = Yup.object().shape({
     .email('Email inválido')
     .required('Email obrigatório'),
   age: Yup.number().typeError('Idade obrigatória'),
-  weight: Yup.number().typeError('Peso obrigatória'),
-  height: Yup.number().typeError('Altura obrigatória'),
+  weight: Yup.string().required('Peso obrigatória'),
+  height: Yup.string().required('Altura obrigatória'),
 });
 
 export default function Cadastrar() {
@@ -60,11 +62,11 @@ export default function Cadastrar() {
             </div>
             <div>
               <label>PESO (em kg)</label>
-              <Input name="weight" type="number" />
+              <CurrencyInput name="weight" precision="3" />
             </div>
             <div>
               <label>ALTURA</label>
-              <Input name="height" type="number" />
+              <InputMask name="height" inputMask="9.99" />
             </div>
           </div>
         </Form>

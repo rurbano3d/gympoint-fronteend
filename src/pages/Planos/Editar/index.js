@@ -9,13 +9,14 @@ import { planUpdate } from '~/store/modules/plan/actions';
 import api from '~/services/api';
 import Button from '~/components/Button';
 import ButtonLink from '~/components/ButtonLink';
+import CurrencyInput from '~/components/CurrencyInput';
 
 import { Right, Content } from './styles';
 
 const schema = Yup.object().shape({
   title: Yup.string().required('Título obrigatório'),
   duration: Yup.string().required('Duração obrigatória'),
-  price: Yup.number().required('Valor obrigatório'),
+  price: Yup.string().required('Valor obrigatório'),
 });
 
 export default function EditarPlanos({ match }) {
@@ -90,15 +91,15 @@ export default function EditarPlanos({ match }) {
             </div>
             <div>
               <label>PREÇO MENSAL</label>
-              <Input
+              <CurrencyInput
                 name="price"
-                type="number"
-                onChange={e => setPrice(e.target.value)}
+                value={price}
+                onChangeEvent={e => setPrice(e.target.value)}
               />
             </div>
             <div id="blockInput">
               <label>PREÇO TOTAL</label>
-              <Input name="priceTotal" type="number" value={total} disabled />
+              <CurrencyInput name="priceTotal" value={total} disabled />
             </div>
           </div>
         </Form>
