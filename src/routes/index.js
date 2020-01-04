@@ -11,6 +11,7 @@ import CadastrarPlanos from '~/pages/Planos/Cadastrar';
 import EditarPlanos from '~/pages/Planos/Editar';
 import ListarMatriculas from '~/pages/Matriculas/Listar';
 import FormMatriculas from '~/pages/Matriculas/Form';
+import Teste from '~/pages/Teste';
 
 import Pedidos from '~/pages/Pedidos';
 
@@ -25,6 +26,7 @@ export default function Routes() {
       <Route path="/planos/novo" exact component={CadastrarPlanos} isPrivate />
       <Route path="/planos/:id/editar" component={EditarPlanos} isPrivate />
       <Route path="/matriculas" exact component={ListarMatriculas} isPrivate />
+      <Route path="/teste" exact component={Teste} isPrivate />
       <Route
         path="/matriculas/novo"
         exact

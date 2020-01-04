@@ -8,7 +8,7 @@ export default function Currency({ name, ...rest }) {
   const ref = useRef(null);
   const { fieldName, registerField, defaultValue, error } = useField(name);
   const [amount, setAmount] = useState(defaultValue);
-  console.tron.log(amount);
+
   useEffect(() => {
     registerField({
       name: fieldName,
@@ -18,7 +18,6 @@ export default function Currency({ name, ...rest }) {
   }, [fieldName, ref.current]); // eslint-disable-line
 
   function handleChange(e) {
-    console.tron.log(e.target.value);
     const { value } = e.target;
     return setAmount(value);
   }
