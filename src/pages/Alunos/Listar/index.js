@@ -33,7 +33,6 @@ export default function ListarAlunos() {
     });
   }
 
-  console.tron.log(page);
   useEffect(() => {
     async function loadStudents() {
       const response = await api.get('students', {

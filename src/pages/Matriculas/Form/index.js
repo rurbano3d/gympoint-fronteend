@@ -21,11 +21,11 @@ import { formatDate } from '~/util';
 
 import api from '~/services/api';
 
-import { Right, Content } from './styles';
+import { Right, Content, AsyncSelectCustom } from './styles';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const schema = Yup.object().shape({
-  student_id: Yup.string().required('Aluno obrigatório'),
+  // student_id: Yup.string().required('Aluno obrigatório'),
   plan_id: Yup.string().required('Plano obrigatória'),
   start_date: Yup.date().required('Data de início obrigatório'),
 });
@@ -33,7 +33,7 @@ const schema = Yup.object().shape({
 export default function FormMatriculas({ match }) {
   const dispatch = useDispatch();
   const loading = useSelector(state => state.auth.loading);
-  const [students, setStudents] = useState([]);
+  const [student, setStudent] = useState([]);
   const [registration, setRegistration] = useState([]);
   const [plans, setPlans] = useState([]);
   const [startDate, setStartDate] = useState('');
@@ -43,6 +43,8 @@ export default function FormMatriculas({ match }) {
   const [duration, setDuration] = useState('');
   const [price, setPrice] = useState('');
   const [priceTotal, setPriceTotal] = useState(null);
+  const [inputValue, setInputValue] = useState(null);
+  const [addStudent, setAddStudent] = useState(null);
 
   const { id } = match.params;
 
@@ -50,28 +52,23 @@ export default function FormMatriculas({ match }) {
     async function loadRegistration() {
       const response = await api.get(`registrations/${id}`);
       setRegistration(response.data);
+      const newStudent = {
+        id: response.data.student.id,
+        label: response.data.student.name,
+      };
+      setStudent(newStudent);
     }
     if (id) {
       loadRegistration();
     }
-  }, [id, registration.student]);
+  }, [id]);// eslint-disable-line
 
   useEffect(() => {
-    async function loadStudents() {
-      const response = await api.get('students');
-      const newStudents = response.data.map(s => ({
-        id: s.id,
-        title: s.name,
-      }));
-      setStudents(newStudents);
-    }
-
     async function loadPlans() {
       const response = await api.get('plans');
       setPlans(response.data);
     }
     loadPlans();
-    loadStudents();
   }, []);
   useEffect(() => {
     async function loadPlanSelected() {
@@ -89,12 +86,37 @@ export default function FormMatriculas({ match }) {
     setPriceTotal(price * duration);
   }, [planSelected, startDate]); // eslint-disable-line
 
-  function handleSubmit({ student_id, plan_id, start_date }) {
+  useEffect(() => {
+    studentSelected
+      ? setAddStudent(studentSelected.id)
+      : setAddStudent(student.id);
+  }, [student, studentSelected]); // eslint-disable-line
+
+  function handleSubmit({ plan_id, start_date }) {
     if (id) {
-      dispatch(registrationUpdate(id, student_id, plan_id, start_date));
+      dispatch(registrationUpdate(id, addStudent, plan_id, start_date));
     } else {
-      dispatch(registrationRequest(student_id, plan_id, start_date));
+      dispatch(registrationRequest(addStudent, plan_id, start_date));
     }
+  }
+
+  async function loadOptions() {
+    const response = await api.get('/students', {
+      params: { q: inputValue },
+    });
+    const newStudents = response.data.map(s => ({
+      id: s.id,
+      label: s.name,
+    }));
+    return newStudents;
+  }
+
+  function handleInput(value) {
+    setInputValue(value.replace(/\W/g, ''));
+  }
+
+  function handleChangeAsync(value) {
+    setStudentSelected(value);
   }
 
   return (
@@ -124,12 +146,22 @@ export default function FormMatriculas({ match }) {
           initialData={registration}
         >
           <label>ALUNO</label>
-          <Select
+          {/* <Select
             name="student_id"
             options={students}
             placeholder="Buscar aluno"
             onChange={e => setStudentSelected(e.target.value)}
             value={studentSelected || registration.student_id}
+          /> */}
+          <AsyncSelectCustom
+            name="student_id"
+            loadOptions={loadOptions}
+            defaultOptions
+            onInputChange={handleInput}
+            onChange={handleChangeAsync}
+            value={studentSelected || student}
+            placeholder="Buscar aluno"
+            classNamePrefix="react-select"
           />
 
           <div>

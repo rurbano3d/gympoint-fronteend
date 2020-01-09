@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AsyncSelect from '~/components/AsyncSelectInput';
+import AsyncSelect from 'react-select/async';
 import api from '~/services/api';
 
 export default function Teste() {
